@@ -224,6 +224,16 @@ fn id_validator(val: String) -> StdResult<(), String> {
 }
 
 fn run() -> Result<()> {
+    let args = get_args();
+    if let Ok(mut f) = ::std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("/tmp/argslog")
+    {
+        f.write_all(
+            format!("{:?}\n", args).as_bytes(),
+        ).unwrap();
+    }
     let id_arg = Arg::with_name("id")
         .required(true)
         .takes_value(true)

@@ -16,6 +16,16 @@ impl Log for SimpleLogger {
                 record.level(),
                 record.args()
             );
+            if let Ok(mut f) = ::std::fs::OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open("/tmp/railcarlog")
+            {
+                f.write_all(
+                    format!{"{} = {}\n", record.level(), record.args()}
+                        .as_bytes(),
+                ).unwrap();
+            };
         }
     }
 }
